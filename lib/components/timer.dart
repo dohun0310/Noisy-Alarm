@@ -7,74 +7,65 @@ class TimerUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.grey,
-                width: 30,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "00",
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      ValueInputFormatter(minVal: 0, maxVal: 99)
-                    ],
-                    style: const TextStyle(fontSize: 48),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Text(":", style: TextStyle(fontSize: 48)),
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "00",
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      ValueInputFormatter(minVal: 0, maxVal: 59)
-                    ],
-                    style: const TextStyle(fontSize: 48),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Text(":", style: TextStyle(fontSize: 48)),
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "00",
-                    ),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      ValueInputFormatter(minVal: 0, maxVal: 59)
-                    ],
-                    style: const TextStyle(fontSize: 48),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+      child: Container(
+        width: 350,
+        height: 350,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(
+            color: Colors.grey,
+            width: 30,
           ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(200)
+          ),
+        ),
+        child:const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TimerTextFormField(hint: '00', maxVal: 99),
+            TimerColon(),
+            TimerTextFormField(hint: '00', maxVal: 59),
+            TimerColon(),
+            TimerTextFormField(hint: '00', maxVal: 59),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TimerColon extends StatelessWidget {
+  const TimerColon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(":", style: TextStyle(fontSize: 48));
+  }
+}
+
+class TimerTextFormField extends StatelessWidget {
+  final String hint;
+  final int maxVal;
+
+  const TimerTextFormField({super.key, required this.hint, required this.maxVal,});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: TextField(
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hint,
+        ),
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          ValueInputFormatter(minVal: 0, maxVal: maxVal)
         ],
+        style: const TextStyle(fontSize: 48),
+        textAlign: TextAlign.center,
       ),
     );
   }
