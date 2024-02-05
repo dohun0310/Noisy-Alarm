@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:noisyalarm/theme.dart';
+
 import 'package:noisyalarm/pages/main/main.dart';
 
 void main() {
@@ -12,12 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: TimerPage(),
-      ),
+      themeMode: ThemeMode.system,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      home: const TimerPage(),
     );
   }
 }
