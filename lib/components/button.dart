@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  const Button({super.key});
+  const Button({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      child: const Text("시작"),
+    return InkWell(
+      onTap: () {},
+      child: Text(text),
     );
   }
 }
