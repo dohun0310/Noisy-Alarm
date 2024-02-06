@@ -27,7 +27,7 @@ class NumberField extends StatelessWidget {
           ValueInputFormatter(minVal: 0, maxVal: maxVal)
         ],
         style: ThemeTexts.largeTitleEmphasized.copyWith(
-          fontSize: 60,
+          fontSize: 56,
           color: Theme.of(context).extension<AppExtension>()?.colors.text,
         ),
         textAlign: TextAlign.center,
