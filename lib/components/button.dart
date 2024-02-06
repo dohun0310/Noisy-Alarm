@@ -23,10 +23,13 @@ class Button extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
+          alignment: Alignment.center,
           padding: const EdgeInsets.all(8),
+          width: 100,
+          height: 50,
           child: Text(
             text,
-            style: ThemeTexts.bodyRegular.copyWith(
+            style: ThemeTexts.title3Regular.copyWith(
               color: Theme.of(context).extension<AppExtension>()?.colors.text,
             ),
             textAlign: TextAlign.center,
