@@ -193,7 +193,7 @@ class TimerPageState extends State<TimerPage> {
               strokeWidth: 12,
             ),
           ),
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -205,7 +205,21 @@ class TimerPageState extends State<TimerPage> {
                 ),
               ),
               Text(
+                ":",
+                style: ThemeTexts.bodyEmphasized.copyWith(
+                  fontSize: 56,
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+              ),
+              Text(
                 minutes.toString().padLeft(2, '0'),
+                style: ThemeTexts.bodyEmphasized.copyWith(
+                  fontSize: 56,
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+              ),
+              Text(
+                ":",
                 style: ThemeTexts.bodyEmphasized.copyWith(
                   fontSize: 56,
                   color: Theme.of(context).extension<AppExtension>()?.colors.text,
