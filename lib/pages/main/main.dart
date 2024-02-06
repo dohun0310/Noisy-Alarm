@@ -79,6 +79,8 @@ class TimerPageState extends State<TimerPage> {
         color: Theme.of(context).extension<AppExtension>()?.colors.purple,
         onTap: () {
           setState(() {
+            isStart = true;
+            isPaused = false;
             isDone = false;
           });
         },
@@ -93,7 +95,9 @@ class TimerPageState extends State<TimerPage> {
             color: Theme.of(context).extension<AppExtension>()?.colors.red,
             onTap: () {
               setState(() {
-                isPaused = true;
+                isStart = false;
+                isPaused = false;
+                isDone = true;
               });
             },
             text: '취소',
@@ -103,7 +107,8 @@ class TimerPageState extends State<TimerPage> {
             color: Theme.of(context).extension<AppExtension>()?.colors.outline,
             onTap: () {
               setState(() {
-                isDone = true;
+                isPaused = true;
+                isDone = false;
               });
             },
             text: '일시 정지',
