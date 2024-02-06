@@ -12,58 +12,34 @@ class TimerPage extends StatefulWidget {
   TimerPageState createState() => TimerPageState();
 }
 
-class MobileLayout extends StatelessWidget {
-  const MobileLayout({
+class ResponsiveLayout extends StatelessWidget {
+  const ResponsiveLayout({
     super.key,
     required this.timer,
-    required this.button
+    required this.button,
+    this.isTabletOrLandscape = false,
   });
 
   final Widget timer;
   final Widget button;
+  final bool isTabletOrLandscape;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          timer,
-          const SizedBox(height: 16),
-          button,
-        ],
-      ),
-    );
-  }
-}
-
-class TabletLayout extends StatelessWidget {
-  const TabletLayout({
-    super.key,
-    required this.timer,
-    required this.button
-  });
-
-  final Widget timer;
-  final Widget button;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          timer,
-          const SizedBox(width: 16),
-          button,
-        ],
-      ),
+      child: isTabletOrLandscape
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [timer, const SizedBox(width: 16), button],
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [timer, const SizedBox(height: 16), button],
+            ),
     );
   }
 }
@@ -77,25 +53,19 @@ class TimerPageState extends State<TimerPage> {
   bool isDone = false;
   bool isPaused = false;
 
-  Widget buildScreen () {
+  Widget buildScreen() {
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
-    if (isTablet || isLandscape) {
-      return TabletLayout(
-        timer: buildTimer(),
-        button: buildButton(true),
-      );
-    } else {
-      return MobileLayout(
-        timer: buildTimer(),
-        button: buildButton(false),
-      );
-    }
+    return ResponsiveLayout(
+      timer: buildTimer(),
+      button: buildButton(),
+      isTabletOrLandscape: isTablet || isLandscape,
+    );
   }
-
+  
   Widget buildTimer() {
-    if (!isStart) {
+    if (!isStart || isPaused) {
       return Container(
         width: 300,
         height: 300,
@@ -156,83 +126,63 @@ class TimerPageState extends State<TimerPage> {
         ),
       );
     }
-
   }
 
-  Widget buildButton(bool isTablet) {
-    if (!isStart) {
-      return Button(
-        color: Theme.of(context).extension<AppExtension>()?.colors.purple,
-        onTap: () {
-          setState(() {
-            isStart = true;
-            isPaused = false;
-            isDone = false;
-          });
-        },
-        text: '시작',
-      );
-    } else {
-      if (isTablet) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.red,
-              onTap: () {
-                setState(() {
-                  isStart = false;
-                  isPaused = false;
-                  isDone = true;
-                });
-              },
-              text: '취소',
-            ),
-            const SizedBox(height: 16),
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
-              onTap: () {
-                setState(() {
-                  isPaused = true;
-                  isDone = false;
-                });
-              },
-              text: '일시 정지',
-            ),
-          ],
-        );
-      } else {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.red,
-              onTap: () {
-                setState(() {
-                  isStart = false;
-                  isPaused = false;
-                  isDone = true;
-                });
-              },
-              text: '취소',
-            ),
-            const SizedBox(width: 16),
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
-              onTap: () {
-                setState(() {
-                  isPaused = true;
-                  isDone = false;
-                });
-              },
-              text: '일시 정지',
-            ),
-          ],
-        );
-      }
-    }
+  Widget buildButton() {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+    Widget startButton = Button(
+      color: Theme.of(context).extension<AppExtension>()?.colors.purple,
+      onTap: () {},
+      text: '시작',
+    );
+
+    Widget resumeButton = Button(
+      color: Theme.of(context).extension<AppExtension>()?.colors.purple,
+      onTap: () {},
+      text: '재개',
+    );
+
+    Widget pauseButton = Button(
+      color: Theme.of(context).extension<AppExtension>()?.colors.outline,
+      onTap: () {},
+      text: '일시 정지',
+    );
+
+    Widget cancelButton = Button(
+      color: Theme.of(context).extension<AppExtension>()?.colors.red,
+      onTap: () {},
+      text: '취소',
+    );
+    
+    return isStart
+        ? (isTablet || isLandscape
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (isPaused)
+                    resumeButton,
+                  if (!isPaused)
+                    pauseButton,
+                  const SizedBox(height: 16),
+                  cancelButton,
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (isPaused)
+                    resumeButton,
+                  if (!isPaused)
+                    pauseButton,
+                  const SizedBox(width: 16),
+                  cancelButton,
+                ],
+              ))
+        : startButton;
   }
 
   @override
