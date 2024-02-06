@@ -100,6 +100,7 @@ class TimerPageState extends State<TimerPage> {
           border: Border.all(
             color: Theme.of(context).extension<AppExtension>()!.colors.purple,
             width: 12,
+            strokeAlign: BorderSide.strokeAlignCenter,
           ),
           borderRadius: BorderRadius.circular(150),
         ),
@@ -138,9 +139,14 @@ class TimerPageState extends State<TimerPage> {
         ),
       );
     } else {
-      return CircularProgressIndicator(
-        value: 1.0,
-        strokeWidth: 12,
+      return SizedBox(
+        width: 300,
+        height: 300,
+        child: CircularProgressIndicator(
+          color: Theme.of(context).extension<AppExtension>()?.colors.purple,
+          value: 1.0,
+          strokeWidth: 12,
+        ),
       );
     }
 
