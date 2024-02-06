@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:noisyalarm/theme.dart';
@@ -49,9 +50,73 @@ class TimerPageState extends State<TimerPage> {
   final TextEditingController minutesController = TextEditingController();
   final TextEditingController secondsController = TextEditingController();
 
+  Timer? timer;
+  int totalTime = 0;
+  int remainingTime = 0;
+
+  int hours = 0;
+  int minutes = 0;
+  int seconds = 0;
+
   bool isStart = false;
   bool isDone = false;
   bool isPaused = false;
+
+  void startTimer() {
+    setState(() {
+      isStart = true;
+      isPaused = false;
+      isDone = false;
+    });
+
+    hours = int.tryParse(hoursController.text) ?? 0;
+    minutes = int.tryParse(minutesController.text) ?? 0;
+    seconds = int.tryParse(secondsController.text) ?? 0;
+
+    totalTime = remainingTime = hours * 3600 + minutes * 60 + seconds;
+
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if (remainingTime > 0) {
+          remainingTime--;
+          hours = remainingTime ~/ 3600;
+          minutes = (remainingTime % 3600) ~/ 60;
+          seconds = remainingTime % 60;
+        } else {
+          timer.cancel();
+          isDone = true;
+          isStart = false;
+        }
+      });
+    });
+  }
+
+  void pauseTimer() {
+    if (timer != null) {
+      timer!.cancel();
+      setState(() {
+        isPaused = true;
+      });
+    }
+  }
+
+  void resumeTimer() {
+    if (isPaused) {
+      startTimer();
+    }
+  }
+
+  void cancelTimer() {
+    if (timer != null) {
+      timer!.cancel();
+      setState(() {
+        isStart = false;
+        isPaused = false;
+        isDone = true;
+        remainingTime = totalTime = 0;
+      });
+    }
+  }
 
   Widget buildScreen() {
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -116,14 +181,46 @@ class TimerPageState extends State<TimerPage> {
         ),
       );
     } else {
-      return SizedBox(
-        width: 300,
-        height: 300,
-        child: CircularProgressIndicator(
-          color: Theme.of(context).extension<AppExtension>()?.colors.purple,
-          value: 1.0,
-          strokeWidth: 12,
-        ),
+      return Stack(
+        alignment: Alignment.center,
+        children: [
+          SizedBox(
+            width: 300,
+            height: 300,
+            child: CircularProgressIndicator(
+              color: Theme.of(context).extension<AppExtension>()?.colors.purple,
+              value: remainingTime / totalTime,
+              strokeWidth: 12,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                hours.toString().padLeft(2, '0'),
+                style: ThemeTexts.bodyEmphasized.copyWith(
+                  fontSize: 56,
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+              ),
+              Text(
+                minutes.toString().padLeft(2, '0'),
+                style: ThemeTexts.bodyEmphasized.copyWith(
+                  fontSize: 56,
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+              ),
+              Text(
+                seconds.toString().padLeft(2, '0'),
+                style: ThemeTexts.bodyEmphasized.copyWith(
+                  fontSize: 56,
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+              ),
+            ],
+          ),
+        ],
       );
     }
   }
@@ -134,28 +231,28 @@ class TimerPageState extends State<TimerPage> {
 
     Widget startButton = Button(
       color: Theme.of(context).extension<AppExtension>()?.colors.purple,
-      onTap: () {},
+      onTap: startTimer,
       text: '시작',
     );
 
     Widget resumeButton = Button(
       color: Theme.of(context).extension<AppExtension>()?.colors.purple,
-      onTap: () {},
+      onTap: resumeTimer,
       text: '재개',
     );
 
     Widget pauseButton = Button(
       color: Theme.of(context).extension<AppExtension>()?.colors.outline,
-      onTap: () {},
+      onTap: pauseTimer,
       text: '일시 정지',
     );
 
     Widget cancelButton = Button(
       color: Theme.of(context).extension<AppExtension>()?.colors.red,
-      onTap: () {},
+      onTap: cancelTimer,
       text: '취소',
     );
-    
+
     return isStart
         ? (isTablet || isLandscape
             ? Column(
