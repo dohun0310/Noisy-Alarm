@@ -60,7 +60,7 @@ class TabletLayout extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           timer,
-          const SizedBox(height: 16),
+          const SizedBox(width: 16),
           button,
         ],
       ),
@@ -80,12 +80,12 @@ class TimerPageState extends State<TimerPage> {
     if (isTablet || isLandscape) {
       return TabletLayout(
         timer: buildTimer(),
-        button: buildButton(),
+        button: buildButton(true),
       );
     } else {
       return MobileLayout(
         timer: buildTimer(),
-        button: buildButton(),
+        button: buildButton(false),
       );
     }
   }
@@ -146,7 +146,7 @@ class TimerPageState extends State<TimerPage> {
 
   }
 
-  Widget buildButton() {
+  Widget buildButton(bool isTablet) {
     if (!isStart) {
       return Button(
         color: Theme.of(context).extension<AppExtension>()?.colors.purple,
@@ -160,34 +160,65 @@ class TimerPageState extends State<TimerPage> {
         text: '시작',
       );
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Button(
-            color: Theme.of(context).extension<AppExtension>()?.colors.red,
-            onTap: () {
-              setState(() {
-                isStart = false;
-                isPaused = false;
-                isDone = true;
-              });
-            },
-            text: '취소',
-          ),
-          const SizedBox(height: 16),
-          Button(
-            color: Theme.of(context).extension<AppExtension>()?.colors.outline,
-            onTap: () {
-              setState(() {
-                isPaused = true;
-                isDone = false;
-              });
-            },
-            text: '일시 정지',
-          ),
-        ],
-      );
+      if (isTablet) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.red,
+              onTap: () {
+                setState(() {
+                  isStart = false;
+                  isPaused = false;
+                  isDone = true;
+                });
+              },
+              text: '취소',
+            ),
+            const SizedBox(width: 16),
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
+              onTap: () {
+                setState(() {
+                  isPaused = true;
+                  isDone = false;
+                });
+              },
+              text: '일시 정지',
+            ),
+          ],
+        );
+      } else {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.red,
+              onTap: () {
+                setState(() {
+                  isStart = false;
+                  isPaused = false;
+                  isDone = true;
+                });
+              },
+              text: '취소',
+            ),
+            const SizedBox(height: 16),
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
+              onTap: () {
+                setState(() {
+                  isPaused = true;
+                  isDone = false;
+                });
+              },
+              text: '일시 정지',
+            ),
+          ],
+        );
+      }
     }
   }
 
