@@ -69,6 +69,10 @@ class TabletLayout extends StatelessWidget {
 }
 
 class TimerPageState extends State<TimerPage> {
+  final TextEditingController hoursController = TextEditingController();
+  final TextEditingController minutesController = TextEditingController();
+  final TextEditingController secondsController = TextEditingController();
+
   bool isStart = false;
   bool isDone = false;
   bool isPaused = false;
@@ -109,7 +113,8 @@ class TimerPageState extends State<TimerPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const NumberField(
+            NumberField(
+              controller: hoursController,
               hint: '00',
               maxVal: 23,
             ),
@@ -120,7 +125,8 @@ class TimerPageState extends State<TimerPage> {
                 color: Theme.of(context).extension<AppExtension>()?.colors.text,
               ),
             ),
-            const NumberField(
+            NumberField(
+              controller: minutesController,
               hint: '00',
               maxVal: 59,
             ),
@@ -131,7 +137,8 @@ class TimerPageState extends State<TimerPage> {
                 color: Theme.of(context).extension<AppExtension>()?.colors.text,
               ),
             ),
-            const NumberField(
+            NumberField(
+              controller: secondsController,
               hint: '00',
               maxVal: 59,
             ),
