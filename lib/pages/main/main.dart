@@ -161,35 +161,6 @@ class TimerPageState extends State<TimerPage> {
       );
     } else {
       if (isTablet) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.red,
-              onTap: () {
-                setState(() {
-                  isStart = false;
-                  isPaused = false;
-                  isDone = true;
-                });
-              },
-              text: '취소',
-            ),
-            const SizedBox(width: 16),
-            Button(
-              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
-              onTap: () {
-                setState(() {
-                  isPaused = true;
-                  isDone = false;
-                });
-              },
-              text: '일시 정지',
-            ),
-          ],
-        );
-      } else {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,6 +177,35 @@ class TimerPageState extends State<TimerPage> {
               text: '취소',
             ),
             const SizedBox(height: 16),
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.outline,
+              onTap: () {
+                setState(() {
+                  isPaused = true;
+                  isDone = false;
+                });
+              },
+              text: '일시 정지',
+            ),
+          ],
+        );
+      } else {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Button(
+              color: Theme.of(context).extension<AppExtension>()?.colors.red,
+              onTap: () {
+                setState(() {
+                  isStart = false;
+                  isPaused = false;
+                  isDone = true;
+                });
+              },
+              text: '취소',
+            ),
+            const SizedBox(width: 16),
             Button(
               color: Theme.of(context).extension<AppExtension>()?.colors.outline,
               onTap: () {
