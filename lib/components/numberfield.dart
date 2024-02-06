@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:noisyalarm/theme.dart';
 
 class NumberField extends StatelessWidget {
+  const NumberField({
+    super.key,
+    required this.hint,
+    required this.maxVal
+  });
+
   final String hint;
   final int maxVal;
-
-  const NumberField({super.key, required this.hint, required this.maxVal,});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,10 @@ class NumberField extends StatelessWidget {
           FilteringTextInputFormatter.digitsOnly,
           ValueInputFormatter(minVal: 0, maxVal: maxVal)
         ],
-        style: const TextStyle(fontSize: 48),
+        style: ThemeTexts.largeTitleEmphasized.copyWith(
+          fontSize: 60,
+          color: Theme.of(context).extension<AppExtension>()?.colors.text,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -29,9 +37,13 @@ class NumberField extends StatelessWidget {
 }
 
 class ValueInputFormatter extends TextInputFormatter {
+  ValueInputFormatter({
+    required this.maxVal,
+    required this.minVal
+  });
+  
   final int maxVal;
   final int minVal;
-  ValueInputFormatter({required this.maxVal, required this.minVal});
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
