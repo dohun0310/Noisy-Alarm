@@ -7,16 +7,19 @@ class NumberField extends StatelessWidget {
   const NumberField({
     super.key,
     required this.hint,
-    required this.maxVal
+    required this.maxVal,
+    required this.controller,
   });
 
   final String hint;
   final int maxVal;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: TextField(
+        controller: controller,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -24,7 +27,7 @@ class NumberField extends StatelessWidget {
         ),
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
-          ValueInputFormatter(minVal: 0, maxVal: maxVal)
+          ValueInputFormatter(minVal: 0, maxVal: maxVal),
         ],
         style: ThemeTexts.largeTitleEmphasized.copyWith(
           fontSize: 56,
@@ -38,19 +41,21 @@ class NumberField extends StatelessWidget {
 
 class ValueInputFormatter extends TextInputFormatter {
   ValueInputFormatter({
+    required this.minVal,
     required this.maxVal,
-    required this.minVal
   });
-  
-  final int maxVal;
+
   final int minVal;
+  final int maxVal;
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isNotEmpty) {
-      final int value = int.parse(newValue.text);
-      if (value > maxVal || value < minVal) {
-        return oldValue;
+      final int value = int.tryParse(newValue.text) ?? minVal;
+      if (value > maxVal) {
+        return TextEditingValue(text: maxVal.toString());
+      } else if (value < minVal) {
+        return TextEditingValue(text: minVal.toString());
       }
     }
     return newValue;
