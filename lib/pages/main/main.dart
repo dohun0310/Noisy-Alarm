@@ -12,10 +12,83 @@ class TimerPage extends StatefulWidget {
   TimerPageState createState() => TimerPageState();
 }
 
+class MobileLayout extends StatelessWidget {
+  const MobileLayout({
+    super.key,
+    required this.timer,
+    required this.button
+  });
+
+  final Widget timer;
+  final Widget button;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          timer,
+          const SizedBox(height: 16),
+          button,
+        ],
+      ),
+    );
+  }
+}
+
+class TabletLayout extends StatelessWidget {
+  const TabletLayout({
+    super.key,
+    required this.timer,
+    required this.button
+  });
+
+  final Widget timer;
+  final Widget button;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          timer,
+          const SizedBox(height: 16),
+          button,
+        ],
+      ),
+    );
+  }
+}
+
 class TimerPageState extends State<TimerPage> {
   bool isStart = false;
   bool isDone = false;
   bool isPaused = false;
+
+  Widget buildScreen () {
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+
+    if (isTablet || isLandscape) {
+      return TabletLayout(
+        timer: buildTimer(),
+        button: buildButton(),
+      );
+    } else {
+      return MobileLayout(
+        timer: buildTimer(),
+        button: buildButton(),
+      );
+    }
+  }
 
   Widget buildTimer() {
     if (!isStart) {
@@ -121,19 +194,7 @@ class TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildTimer(),
-            const SizedBox(height: 16),
-            buildButton(),
-          ],
-        )
-      ),
+      body: buildScreen(),
     );
   } 
 }
