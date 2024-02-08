@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:noisyalarm/theme.dart';
 
 class Button extends StatelessWidget {
@@ -18,22 +17,25 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: color,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(120),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(8),
-          width: 100,
-          height: 50,
-          child: Text(
-            text,
-            style: ThemeTexts.title3Regular.copyWith(
-              color: Theme.of(context).extension<AppExtension>()?.colors.text,
+        borderRadius: BorderRadius.circular(120),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
+              child: Text(
+                text,
+                style: ThemeTexts.title3Regular.copyWith(
+                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
         ),
       ),
     );
