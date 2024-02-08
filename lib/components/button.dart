@@ -21,21 +21,20 @@ class Button extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(120),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
-              child: Text(
-                text,
-                style: ThemeTexts.title3Regular.copyWith(
-                  color: Theme.of(context).extension<AppExtension>()?.colors.text,
-                ),
-                textAlign: TextAlign.center,
-              ),
+        child: Container(
+          alignment: Alignment.center,
+          width: 92,
+          height: 60,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(120),
+          ),
+          child: Text(
+            text,
+            style: ThemeTexts.bodyRegular.copyWith(
+              color: Theme.of(context).extension<AppExtension>()?.colors.text,
             ),
-          ],
+          ),
         ),
       ),
     );
